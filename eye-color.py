@@ -4,7 +4,6 @@ import sys
 import os
 import numpy as np
 import cv2
-import time
 import argparse
 
 # img1 l(200, 220) | r(305, 213)
@@ -17,6 +16,7 @@ parser.add_argument('--lx', type=int, default=295)
 parser.add_argument('--ly', type=int, default=440)
 parser.add_argument('--rx', type=int, default=595)
 parser.add_argument('--ry', type=int, default=420)
+parser.add_argument('--eye_radius', type=int, default=20)
 args = parser.parse_args()
 
 # define HSV color ranges for eyes color
@@ -28,30 +28,65 @@ BrownBlack  =   ((0, 10, 5), (40, 40, 25))
 Green       =   ((60, 21, 50), (165, 100, 85))
 GreenGray   =   ((60, 2, 25), (165, 20, 65))
 
-def eye_color(image1, lcenter, rcenter):
-    imgHSV = cv2.cvtColor(image1, cv2.COLOR_BGR2HSV)
-    imgMask = np.zeros((image1.shape[0], image1.shape[1], 1))
-    cv2.circle(imgMask, lcenter, 25, (255,255,255), -1)
-    cv2.circle(imgMask, rcenter, 25, (255,255,255), -1)
+class_name = ("Blue       ", "Blue Gray  ", "Brown      ", "Brown Gray ", "Brown Black", "Green      ", "Green Gray ", "Other")
 
-    print imgMask.item
+# define eye color category rules in HSV space
+def find_class(hsv):
+    if (hsv[0] >= Blue[0][0]) and (hsv[0] <= Blue[1][0]) and (hsv[1] >= Blue[0][1]) and hsv[1] <= Blue[1][1] and (hsv[2] >= Blue[0][2]) and (hsv[2] <= Blue[1][2]):
+        return 0
+    elif (hsv[0] >= BlueGray[0][0]) and (hsv[0] <= BlueGray[1][0]) and (hsv[1] >= BlueGray[0][1]) and hsv[1] <= BlueGray[1][1] and (hsv[2] >= BlueGray[0][2]) and (hsv[2] <= BlueGray[1][2]):
+        return 1
+    elif (hsv[0] >= Brown[0][0]) and (hsv[0] <= Brown[1][0]) and (hsv[1] >= Brown[0][1]) and hsv[1] <= Brown[1][1] and (hsv[2] >= Brown[0][2]) and (hsv[2] <= Brown[1][2]):
+        return 2
+    elif (hsv[0] >= BrownGray[0][0]) and (hsv[0] <= BrownGray[1][0]) and (hsv[1] >= BrownGray[0][1]) and hsv[1] <= BrownGray[1][1] and (hsv[2] >= BrownGray[0][2]) and (hsv[2] <= BrownGray[1][2]):    
+        return 3
+    elif (hsv[0] >= BrownBlack[0][0]) and (hsv[0] <= BrownBlack[1][0]) and (hsv[1] >= BrownBlack[0][1]) and hsv[1] <= BrownBlack[1][1] and (hsv[2] >= BrownBlack[0][2]) and (hsv[2] <= BrownBlack[1][2]):
+        return 4
+    elif (hsv[0] >= Green[0][0]) and (hsv[0] <= Green[1][0]) and (hsv[1] >= Green[0][1]) and hsv[1] <= Green[1][1] and (hsv[2] >= Green[0][2]) and (hsv[2] <= Green[1][2]):
+        return 5
+    elif (hsv[0] >= GreenGray[0][0]) and (hsv[0] <= GreenGray[1][0]) and (hsv[1] >= GreenGray[0][1]) and hsv[1] <= GreenGray[1][1] and (hsv[2] >= GreenGray[0][2]) and (hsv[2] <= GreenGray[1][2]):
+        return 6
+    else:
+        return 7
 
-    cv2.imwrite("mask.jpg", imgMask)
+def eye_color(image, lcenter, rcenter, eye_radius):
+    imgHSV = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+    imgMask = np.zeros((image.shape[0], image.shape[1], 1))
 
-    h, s, v = cv2.split(imgHSV)
+    #cv2.circle(image, lcenter, eye_radius, (255,0,0), 2)
+    #cv2.circle(image, rcenter, eye_radius, (255,0,0), 2)
+    #cv2.imwrite("eye_roi.jpg", image)
 
-    cv2.circle(image, lcenter, 25, (0, 255, 0), 1)
-    cv2.circle(image, rcenter, 25, (0, 255, 0), 1)
-    cv2.imshow("img", image)
-    #cv2.waitKey(0)
-    cv2.imwrite("test.jpg", image)
+    cv2.circle(imgMask, lcenter, eye_radius, (255,255,255), -1)
+    cv2.circle(imgMask, rcenter, eye_radius, (255,255,255), -1)
+    #cv2.imwrite("eye_roi_mask.jpg", imgMask)
 
+    h = image.shape[0]
+    w = image.shape[1]
 
+    eye_class = []
+    for i in range(8):
+        eye_class.append(0)
+    
+    for y in range(0, h):
+        for x in range(0, w):
+            mask_val = imgMask[y, x]
+            if mask_val != 0:
+                eye_color_class = find_class(imgHSV[y,x])
+                if eye_color_class != -1:
+                    eye_class[eye_color_class] += 1
+
+    total_vote = 0
+    for i in range(7):
+        total_vote = total_vote+eye_class[i]
+
+    print "\n **** Eyes Color Percentage **** \n"
+    for i in range(7):
+        print class_name[i], ": ", round(float((eye_class[i])/float(total_vote))*100,2), "%"
 
 if __name__ == '__main__':
     # read image 
-    image_path = args.image_path
-    lcenter = (args.lx, args.ly)
-    rcenter = (args.rx, args.ry)
-    image = cv2.imread(image_path, cv2.IMREAD_COLOR)    
-    eye_color(image, lcenter, rcenter)
+    image = cv2.imread(args.image_path, cv2.IMREAD_COLOR)    
+
+    # detect color percentage
+    eye_color(image, (args.lx, args.ly), (args.rx, args.ry), args.eye_radius)
