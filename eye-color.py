@@ -34,6 +34,8 @@ def eye_color(image1, lcenter, rcenter):
     cv2.circle(imgMask, lcenter, 25, (255,255,255), -1)
     cv2.circle(imgMask, rcenter, 25, (255,255,255), -1)
 
+    print imgMask.item
+
     cv2.imwrite("mask.jpg", imgMask)
 
     h, s, v = cv2.split(imgHSV)
