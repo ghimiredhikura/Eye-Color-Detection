@@ -1,6 +1,6 @@
-## eye-color
+## Eye Color Detection
 
-eye color detection
+![Alt text](run_command.png)
 
 ### References
 1. [What color are your eyes exactly?](https://www.edow.com/general-eye-care/eyecolor/)
