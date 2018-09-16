@@ -4,6 +4,7 @@ import sys
 import os
 import numpy as np
 import cv2
+from scipy.spatial import distance as dist
 import argparse
 
 # img1 l(200, 220) | r(305, 213)
@@ -16,7 +17,6 @@ parser.add_argument('--lx', type=int, default=295)
 parser.add_argument('--ly', type=int, default=440)
 parser.add_argument('--rx', type=int, default=595)
 parser.add_argument('--ry', type=int, default=420)
-parser.add_argument('--eye_radius', type=int, default=20)
 args = parser.parse_args()
 
 # define HSV color ranges for eyes color
@@ -49,16 +49,19 @@ def find_class(hsv):
     else:
         return 7
 
-def eye_color(image, lcenter, rcenter, eye_radius):
+def eye_color(image, lcenter, rcenter):
     imgHSV = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
     imgMask = np.zeros((image.shape[0], image.shape[1], 1))
+    
+    eye_radius = dist.euclidean(lcenter, rcenter)
+    eye_radius = eye_radius/15
 
-    #cv2.circle(image, lcenter, eye_radius, (255,0,0), 2)
-    #cv2.circle(image, rcenter, eye_radius, (255,0,0), 2)
+    #cv2.circle(image, lcenter, int(eye_radius), (255,0,0), 2)
+    #cv2.circle(image, rcenter, int(eye_radius), (255,0,0), 2)
     #cv2.imwrite("eye_roi.jpg", image)
-
-    cv2.circle(imgMask, lcenter, eye_radius, (255,255,255), -1)
-    cv2.circle(imgMask, rcenter, eye_radius, (255,255,255), -1)
+   
+    cv2.circle(imgMask, lcenter, int(eye_radius), (255,255,255), -1)
+    cv2.circle(imgMask, rcenter, int(eye_radius), (255,255,255), -1)
     #cv2.imwrite("eye_roi_mask.jpg", imgMask)
 
     h = image.shape[0]
@@ -89,4 +92,4 @@ if __name__ == '__main__':
     image = cv2.imread(args.image_path, cv2.IMREAD_COLOR)    
 
     # detect color percentage
-    eye_color(image, (args.lx, args.ly), (args.rx, args.ry), args.eye_radius)
+    eye_color(image, (args.lx, args.ly), (args.rx, args.ry))
