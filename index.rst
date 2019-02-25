@@ -1,6 +1,6 @@
 Eye Color Detection
 
-![Alt text](run_command.png)
+run_command.png
 
 References
 1. What color are your eyes exactly? 
