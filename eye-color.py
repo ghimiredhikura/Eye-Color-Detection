@@ -88,7 +88,7 @@ def eye_color(image):
         print(class_name[i], ": ", round(eye_class[i]/total_vote*100, 2), "%")
     
     label = 'Dominant Eye Color: %s' % class_name[main_color_index]  
-    cv2.putText(image, label, (left_eye[0]-10, left_eye[1]-40), cv2.FONT_HERSHEY_SIMPLEX, 1, (155,255,0))
+    cv2.putText(image, label, (left_eye[0]-10, left_eye[1]-40), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (155,255,0))
     cv2.imshow('EYE-COLOR-DETECTION', image)
 
 if __name__ == '__main__':
@@ -98,7 +98,7 @@ if __name__ == '__main__':
         image = cv2.imread(opt.input_path, cv2.IMREAD_COLOR)
         # detect color percentage
         eye_color(image)
-        cv2.imwrite('data/result.jpg', image)    
+        cv2.imwrite('sample/result.jpg', image)    
         cv2.waitKey(0)
 
     # video or webcam

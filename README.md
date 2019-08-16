@@ -25,7 +25,7 @@
     Green Gray :  0.0 %
     Other :  34.56 %
 
-<p align="left"><img src="sample/result.jpg" width="740"\></p>
+<p align="left"><img src="sample/result.jpg" width="640"\></p>
 
 #### Usage [Video/Webcam]
     $ python eye-color.py --input_path=sample/video.mp4 --input_type=video
@@ -43,7 +43,7 @@
     Green Gray :  0.79 %
     Other :  80.63 %
 
-<p align="left"><img src="sample/result_video.jpg" width="740"\></p>
+<p align="left"><img src="sample/result_video.jpg" width="640"\></p>
 
 #### References
 1. [MTCNN face detection implementation for TensorFlow, as a PIP package.](https://github.com/ipazc/mtcnn)
