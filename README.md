@@ -31,6 +31,7 @@
     $ python eye-color.py --input_path=sample/video.mp4 --input_type=video
 
 **Output:**  
+
     Dominant Eye Color:  Green
 
     **Eyes Color Percentage **
