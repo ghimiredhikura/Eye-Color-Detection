@@ -11,7 +11,7 @@
 #### Usage [Image]
     $ python eye-color.py --input_path=sample/2.jpg --input_type=image
 
-*Output:*
+**Output:**  
 
     Diminant Eye Color:  Green
 
@@ -30,7 +30,7 @@
 #### Usage [Video/Webcam]
     $ python eye-color.py --input_path=sample/video.mp4 --input_type=video
 
-*Output:*
+**Output:**  
     Dominant Eye Color:  Green
 
     **Eyes Color Percentage **
