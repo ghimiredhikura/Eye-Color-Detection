@@ -13,17 +13,18 @@
 
 **Output:**  
 
-    Diminant Eye Color:  Green
+Diminant Eye Color:  Green  
 
-    **Eyes Color Percentage **
-    Blue :  0.0 %
-    Blue Gray :  0.0 %
-    Brown :  0.0 %
-    Brown Gray :  0.0 %
-    Brown Black :  0.0 %
-    Green :  65.44 %
-    Green Gray :  0.0 %
-    Other :  34.56 %
+|Color         | Percentage (%)|
+|--------------|-----------|
+|Blue |  0.0 |
+|Blue Gray |  0.0 |
+|Brown |  0.0 |
+|Brown Gray |  0.0 |
+|Brown Black |  0.0 |
+|Green |  65.44 |
+|Green Gray |  0.0 |
+|Other |  34.56 |
 
 <p align="left"><img src="sample/result.jpg" width="640"\></p>
 
@@ -32,17 +33,18 @@
 
 **Output:**  
 
-    Dominant Eye Color:  Green
+Dominant Eye Color:  Green
 
-    **Eyes Color Percentage **
-    Blue :  0.0 %
-    Blue Gray :  0.0 %
-    Brown :  0.0 %
-    Brown Gray :  0.0 %
-    Brown Black :  0.0 %
-    Green :  18.58 %
-    Green Gray :  0.79 %
-    Other :  80.63 %
+|Color         | Percentage (%)|
+|--------------|-----------|
+|Blue |  0.0 |
+|Blue Gray |  0.0 |
+|Brown |  0.0 |
+|Brown Gray |  0.0 |
+|Brown Black |  0.0 |
+|Green |  18.58 |
+|Green Gray |  0.79 |
+|Other |  80.63 |
 
 <p align="left"><img src="sample/result_video.jpg" width="640"\></p>
 
